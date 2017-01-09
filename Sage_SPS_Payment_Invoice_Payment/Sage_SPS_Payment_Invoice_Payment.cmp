@@ -1,0 +1,160 @@
+<aura:component >
+        
+    <aura:attribute name="invoice_amount" type="Decimal" />
+    <aura:attribute name="invoice_total" type="Decimal" />
+    <aura:attribute name="balance_due" type="Decimal"/>
+    <aura:attribute name="partial_amount" type="Decimal" />
+    <aura:attribute name="invoice_partial_total" type="Decimal" />
+
+    <aura:attribute name="is_full_payment" type="boolean" default="true" access="global" />
+
+    
+	<div class="slds-box slds-box--small">
+    
+        <div class="slds-p-bottom--small">
+        
+            <fieldset class="slds-form-element">
+                <div class="slds-form-element__control slds-grid">
+                    <span class="slds-radio slds-col">
+                        <!-- <ui:inputRadio value="true" name="options" /> -->
+                        <input type="radio" id="radio-full-payment" name="options" checked="true" onclick="{!c.handleFull}" />
+                        <label class="slds-radio__label" for="radio-full-payment">
+                            <span class="slds-radio--faux"></span>
+                            <span class="slds-form-element__label">Full Payment</span>
+                        </label>
+                    </span>
+                    <span class="slds-radio slds-col">
+                        <!-- <ui:inputRadio value="true" name="options" /> -->
+                        <input type="radio" id="radio-partial-payment" name="options" onclick="{!c.handlePartial}" />
+                        <label class="slds-radio__label" for="radio-partial-payment">
+                            <span class="slds-radio--faux"></span>
+                            <span class="slds-form-element__label">Partial Payment</span>
+                        </label>
+                    </span>
+                </div>
+            </fieldset>
+        
+        </div>
+        
+        
+        <div class="slds-form-element">
+            <div class="slds-form-element_control">
+                <div aura:id="show_full_payment">
+
+                    <div class="slds-theme--shade slds-box slds-box-small">
+                        
+                        <div class="slds-p-bottom--small" style="font-weight: bold;"><h3 class="slds-section__title">INCLUDED WITH THIS PAYMENT:</h3></div>
+                        
+                        <div class="slds-section" aura:id="isFullPayment">
+                            <h4 class="slds-section__title">
+                                <!--Todo: dynamic list transferred from invoices page ,fix onclick method to show invoice detail?-->
+                                <button class="slds-button slds-section__title-action" onclick="">
+                                    INV-000000002</button>
+                                <div class="slds-p-right--large">
+                                	<ui:outputCurrency value="{!v.invoice_amount}" currencySymbol="$" />
+                                </div>
+                            </h4>
+
+                            <table class="slds-table slds-table--bordered slds-table--cell-buffer slds-no-row-hover slds-theme--shade">
+                                <tr>
+                                    <th class="slds-size--2-of-12 slds-text-heading--medium">Total:</th>
+                                    <td class="slds-size--10-of-12 slds-text-heading--medium" style="font-weight:bold; text-align:right">
+                                        <ui:outputCurrency value="{!v.invoice_amount}" currencySymbol="$" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        
+                    </div>
+                    
+                    <section class="slds-clearfix">
+                        <div class="slds-float--right slds-p-top--large">
+                            <button class="slds-button slds-button--neutral slds-m-horizontal--x-small" onclick="{!c.handleCancel}" style="width:100px">Cancel</button>
+                            <button class="slds-button slds-button--brand" onclick="{!c.handlePay}" style="width:100px; padding-left:20px">Pay Now</button>
+                        </div>
+                    </section>
+
+                </div>
+                <div class="slds-hide" aura:id="show_partial_payment">
+                    <aura:if isTrue="{!v.invoice_amount == v.invoice_total}">
+                        <div class="slds-theme--shade slds-box slds-box-small">
+                            
+                            <div class="slds-p-bottom--small" style="font-weight: bold;"><h3 class="slds-section__title">INCLUDED WITH THIS PAYMENT:</h3></div>
+
+                                <div class="slds-section">
+                                    <h4 class="slds-section__title">
+                                        <!--Todo: dynamic list transferred from invoices page ,fix onclick method to show invoice detail?-->
+                                        <button class="slds-button slds-section__title-action" onclick="">
+                                            INV-000000002</button>
+                                        <div class="slds-p-right--large"><ui:inputCurrency format="$#,###.##"  class="slds-input" value="{!v.partial_amount}" /></div>
+                                    </h4>
+
+                                    <table class="slds-table slds-table--bordered slds-table--cell-buffer slds-no-row-hover slds-theme--shade">
+                                        <tr>
+                                            <th class="slds-size--2-of-12 slds-text-heading--medium">Total:</th>
+                                            <td class="slds-size--10-of-12 slds-text-heading--medium" style="font-weight:bold; text-align:right">
+                                                <ui:outputCurrency value="{!v.invoice_total}" currencySymbol="$" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                        </div>
+
+                        <section class="slds-clearfix">
+                            <div class="slds-float--right slds-p-top--large">
+                                <button class="slds-button slds-button--neutral slds-m-horizontal--x-small" onclick="{}" style="width:100px">Cancel</button>
+                                <button class="slds-button slds-button--brand" onclick="{!c.handleConfirm}" style="width:100px; padding-left:20px">Confirm</button>
+                            </div>
+                        </section>
+
+                    <aura:set attribute="else">
+                        <div class="slds-theme--shade slds-box slds-box-small">
+                            <div class="slds-p-bottom--small" style="font-weight: bold;"><h3 class="slds-section__title">INCLUDED WITH THIS PAYMENT:</h3></div>
+                            <div class="slds-section">
+                                <h4 class="slds-section__title">
+                                    <!--Todo: dynamic list transferred from invoices page ,fix onclick method to show invoice detail?-->
+                                    <button class="slds-button slds-section__title-action" onclick="">
+                                        INV-000000002</button>
+                                    <div class="slds-p-right--large">
+                                        <ui:outputCurrency value="{!v.invoice_amount}" currencySymbol="$" />
+                                    </div>
+                                </h4>
+
+                            <table class="slds-table slds-table--bordered slds-table--cell-buffer slds-no-row-hover slds-theme--shade">
+                                <tr style="color: red;">
+                                    <th class="slds-size--2-of-12 slds-text-heading--medium">*(Balance Due):</th>
+                                    <td class="slds-size--10-of-12 slds-text-heading--medium" style="text-align:right">
+                                        <ui:outputCurrency value="{!v.balance_due}" currencySymbol="$" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="slds-size--2-of-12 slds-text-heading--medium">Total:</th>
+                                    <td class="slds-size--10-of-12 slds-text-heading--medium" style="font-weight:bold; text-align:right">
+                                        <ui:outputCurrency value="{!v.invoice_total}" currencySymbol="$" />
+                                    </td>
+                                </tr>
+                            </table>
+                            </div>
+                        </div>
+
+                        <section class="slds-clearfix">
+                            <div class="slds-float--right slds-p-top--large">
+                                <button class="slds-button slds-button--neutral slds-m-horizontal--x-small" onclick="{!c.handleCancel}" style="width:100px">Cancel</button>
+                                <button class="slds-button slds-button--brand" onclick="{!c.handlePay}" style="width:100px; padding-left:20px">Pay Now</button>
+                            </div>
+                        </section>
+                    </aura:set>
+
+                    </aura:if>
+
+
+
+
+                </div>
+
+            </div>
+        </div>
+        
+    </div>
+</aura:component>

@@ -1,0 +1,111 @@
+<aura:component description="Sage_SPS_Payment_Acct_Info">
+
+    <aura:attribute name="is_edit" type="boolean" default="false" />
+
+    <aura:attribute name="company" type="String" />
+    <aura:attribute name="account" type="String" />
+    <aura:attribute name="address" type="String" />
+    <aura:attribute name="phone" type="String" />
+    <aura:attribute name="email_address" type="String" />
+    <aura:attribute name="currencies" type="String" />
+
+    <div class="slds-form-element">
+        <div class="slds-form-element__control">
+            <aura:if isTrue="{!v.is_edit}">
+
+                <div class="slds-box slds-box--small slds-theme--default">
+
+                    <div class="slds-grid slds-grid--vertical-align-center slds-p-bottom--small" style="font-weight: bold;">
+                        <div class="slds-col">
+                            <h3 class="slds-section__title">BUSINESS ACCOUNT INFORMATION</h3>
+                        </div>
+                        <section class="slds-clearfix">
+                            <div class="slds-col slds-float--right">
+                                <button class="slds-button slds-button--brand" onclick="{!c.handleSave}" >Save</button>
+                            </div>
+                        </section>
+                    </div>
+
+                    <table class="slds-table slds-table--bordered slds-table--col-bordered slds-table--cell-buffer slds-no-row-hover slds-box slds-box--small">
+                        <tbody>
+                        <tr>
+                            <th class="slds-size--2-of-12 slds-text-heading--label">Company:</th>
+                            <td class="slds-size--10-of-12 slds-text-body--regular"><ui:inputText aura:id="company" class="slds-input" value="{!v.company}" /></td>
+                        </tr>
+                        <tr>
+                            <th class="slds-size--2-of-12 slds-text-heading--label">Account:</th>
+                            <td class="slds-size--10-of-12 slds-text-body--regular"><ui:inputText aura:id="account" class="slds-input" value="{!v.account}" /></td>
+                        </tr>
+                        <tr>
+                            <th class="slds-size--2-of-12 slds-text-heading--label">Address:</th>
+                            <td class="slds-size--10-of-12 slds-text-body--regular"><ui:inputText aura:id="address" class="slds-input" value="{!v.address}" /></td>
+                            <!--how to make go over to next line with address?-->
+                        </tr>
+                        <tr>
+                            <th class="slds-size--2-of-12 slds-text-heading--label">Phone:</th>
+                            <td class="slds-size--10-of-12 slds-text-body--regular"><ui:inputPhone aura:id="phone" class="slds-input" value="{!v.phone}" /></td>
+                        </tr>
+                        <tr>
+                            <th class="slds-size--2-of-12 slds-text-heading--label">Email:</th>
+                            <td class="slds-size--10-of-12 slds-text-body--regular"><ui:inputEmail aura:id="email_address" class="slds-input" value="{!v.email_address}" /></td>
+                        </tr>
+                        <tr>
+                            <th class="slds-size--2-of-12 slds-text-heading--label">Currency:</th>
+                            <td class="slds-size--10-of-12 slds-text-body--regular"><ui:inputText aura:id="currency" class="slds-input" value="{!v.currencies}" /></td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <aura:set attribute="else">
+
+                    <div class="slds-box slds-box--small slds-theme--default">
+
+                        <div class="slds-grid slds-grid--vertical-align-center slds-p-bottom--small" style="font-weight: bold;">
+                            <div class="slds-col">
+                                <h3 class="slds-section__title">BUSINESS ACCOUNT INFORMATION</h3>
+                            </div>
+                            <div class="slds-col">
+                                <button class="slds-float--right slds-button slds-button--neutral" onclick="{!c.handleEdit}" >Edit</button>
+                            </div>
+                        </div>
+
+                        <table class="slds-table slds-table--bordered slds-table--col-bordered slds-table--cell-buffer slds-no-row-hover slds-box slds-box--small">
+                            <tbody>
+                            <tr>
+                                <th class="slds-size--2-of-12 slds-text-heading--label">Company:</th>
+                                <td class="slds-size--10-of-12 slds-text-body--regular"><ui:outputText value="{!v.company}" /></td>
+                            </tr>
+                            <tr>
+                                <th class="slds-size--2-of-12 slds-text-heading--label">Account:</th>
+                                <td class="slds-size--10-of-12 slds-text-body--regular"><ui:outputText value="{!v.account}" /></td>
+                            </tr>
+                            <tr>
+                                <th class="slds-size--2-of-12 slds-text-heading--label">Address:</th>
+                                <td class="slds-size--10-of-12 slds-text-body--regular"><ui:outputText value="{!v.address}" /></td>
+                                <!--how to make go over to next line with address?-->
+                            </tr>
+                            <tr>
+                                <th class="slds-size--2-of-12 slds-text-heading--label">Phone:</th>
+                                <td class="slds-size--10-of-12 slds-text-body--regular"><ui:outputPhone value="{!v.phone}" /></td>
+                            </tr>
+                            <tr>
+                                <th class="slds-size--2-of-12 slds-text-heading--label">Email:</th>
+                                <td class="slds-size--10-of-12 slds-text-body--regular"><ui:outputEmail value="{!v.email_address}" /></td>
+                            </tr>
+                            <tr>
+                                <th class="slds-size--2-of-12 slds-text-heading--label">Currnecy:</th>
+                                <td class="slds-size--10-of-12 slds-text-body--regular"><ui:outputText value="{!v.currencies}" /></td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </aura:set>
+            </aura:if>
+        </div>
+    </div>
+
+</aura:component>

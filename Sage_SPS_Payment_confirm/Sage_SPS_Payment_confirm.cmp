@@ -1,0 +1,308 @@
+<aura:component implements="force:appHostable">
+
+    <aura:attribute name="invoice_amount" type="Decimal" default="" />
+    <aura:attribute name="invoice_total" type="Decimal" default="" />
+
+    <aura:attribute name="is_edit" type="boolean" default="true" />
+    <aura:attribute name="is_same_billing_address" type="boolean" default="true" />
+    <aura:attribute name="is_primary" type="boolean" default="true" />
+    <aura:attribute name="is_full_payment" type="boolean" />
+
+
+    <aura:attribute name="card_number" type="String" default="" />
+    <aura:attribute name="expiration_date" type="String" default="" />
+    <aura:attribute name="cardholder_name" type="String" default="" />
+    <aura:attribute name="cvv" type="Integer" default="" />
+    <aura:attribute name="billing_address_1" type="String" default="" />
+    <aura:attribute name="billing_address_2" type="String" default="" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.handleConfirmation}" />
+
+
+    <div class="slds" style="margin: 20px;" aura:id="main">
+
+        <div class="slds-grid slds-wrap">
+
+            <div class="slds-notify_container" style="position: relative;">
+                <div class="slds-notify slds-notify--alert slds-theme--success slds-theme--alert-texture" role="alert">
+                    <button class="slds-button slds-notify__close slds-button--icon-inverse" title="Close">
+                        <c:svg ariahidden="true" class="slds-button__icon" xlinkhref="{!$Resource.SLDS202 + '/assets/icons/utility-sprite/svg/symbols.svg#close'}" />
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <span class="slds-assistive-text">Success</span>
+                    <h2>
+                        Sales Invoice Payment was processed successfully!
+                    </h2>
+                </div>
+            </div>
+
+
+
+
+            <div class="slds-col slds-size--1-of-1">
+
+                <div class="slds-p-top--medium slds-p-bottom--medium slds-p-left--medium slds-p-right--medium slds-theme--shade">
+                    <c:Sage_COR_Bank_Drive_Page_Icon title="Banks" subtitle="Sage Payment Solutions" icon="custom16" icon_category="custom" icon_background_color="standard-account" icon_size="large" />
+                </div>
+
+            </div>
+
+            <div class="slds-col slds-size--1-of-1 slds-p-top--medium slds-p-bottom--medium slds-p-left--large slds-p-right--large">
+
+                <div class="slds-col slds-p-top--small slds-p-bottom--small">
+                    <!--Status Component-->
+                    <div class="slds-wizard" role="navigation">
+                        <ol class="slds-wizard__list">
+                            <li class="slds-wizard__item slds-is-active">
+                                <a href="javascript:void(0);" class="slds-wizard__link">
+                                    <span class="slds-wizard__marker"></span>
+                                    <span class="slds-wizard__label slds-text-title--caps slds-truncate">Invoices</span>
+                                </a>
+                            </li>
+                            <li class="slds-wizard__item slds-is-active">
+                                <a href="javascript:void(0);" class="slds-wizard__link">
+                                    <span class="slds-wizard__marker"></span>
+                                    <span class="slds-wizard__label slds-text-title--caps slds-truncate">Payment</span>
+                                </a>
+                            </li>
+                            <li class="slds-wizard__item slds-is-active">
+                                <a href="javascript:void(0);" class="slds-wizard__link">
+                                    <span class="slds-wizard__marker"></span>
+                                    <span class="slds-wizard__label slds-text-title--caps slds-truncate">Confirmation</span>
+                                </a>
+                            </li>
+                        </ol>
+                        <span class="slds-wizard__progress" style="z-index: 0;">
+                            <span class="slds-wizard__progress-bar" style="width:100%;"></span>
+                        </span>
+                    </div>
+                    <!--/Status Component-->
+                </div>
+
+                <div class="slds-col slds-p-top--small slds-p-bottom--small">
+
+                    <div class="slds-grid slds-wrap slds-grid--pull-padded-medium">
+
+                        <div class="slds-col slds-p-horizontal--medium slds-p-bottom--large slds-size--1-of-1 slds-medium-size--1-of-2">
+                            <!--/Payment Card component-->
+                            <div class="slds-form-element">
+                                <div class="slds-form-element__control">
+
+                                    <div class="slds-box slds-box--small slds-theme--default">
+
+                                        <div class="slds-grid slds-grid--vertical-align-center slds-p-bottom--small" style="font-weight: bold;">
+                                            <div class="slds-col">
+                                                <h3 class="slds-section__title">PAYMENT INFORMATION</h3>
+                                            </div>
+                                            <div class="slds-col">
+                                                <button class="slds-float--right slds-button slds-button--neutral" onclick="{!c.handleEdit}" disabled="disabled">Edit</button>
+                                            </div>
+                                        </div>
+
+                                        <table class="slds-table slds-table--bordered slds-table--col-bordered slds-table--cell-buffer slds-no-row-hover slds-box slds-box--small">
+                                            <tbody>
+                                            <tr>
+                                                <th class="slds-size--2-of-12 slds-text-heading--label">Card Number:</th>
+                                                <td class="slds-size--10-of-12 slds-text-body--regular"><ui:outputText value="{!v.card_number}" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th class="slds-size--2-of-12 slds-text-heading--label">Expiration Date:</th>
+                                                <td class="slds-size--10-of-12 slds-text-body--regular"><ui:outputText value="{!v.expiration_date}" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th class="slds-size--2-of-12 slds-text-heading--label">Cardholder Name:</th>
+                                                <td class="slds-size--10-of-12 slds-text-body--regular"><ui:outputText value="{!v.cardholder_name}" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th class="slds-size--2-of-12 slds-text-heading--label">CVV:</th>
+                                                <td class="slds-size--10-of-12 slds-text-body--regular"><ui:outputNumber value="{!v.cvv}" /></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                        <div class="slds-form-element slds-p-top--small">
+                                            <div class="slds-form-element__control">
+                                                <span class="slds-checkbox">
+                                                    <input type="checkbox" name="billing_address_options" id="billing_address_checkbox" checked="{!v.is_same_billing_address}" onchange="{!c.handleBillingAddressCheckbox}" disabled="disabled"/>
+                                                    <label class="slds-checkbox__label" for="billing_address_checkbox">
+                                                        <span class="slds-checkbox--faux"></span>
+                                                        <span class="slds-form-element__label">Billing Address Same as Buisness Account</span>
+                                                    </label>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <aura:if isTrue="{!v.is_same_billing_address}">
+
+                                    <aura:set attribute="else">
+                                        <div class="slds-box slds-box--small slds-theme--default slds-m-top--small">
+                                            <div class="slds-grid slds-grid--vertical-align-center slds-p-bottom--small" style="font-weight: bold;">
+                                                <div class="slds-col">
+                                                    <h3 class="slds-section__title">BILLING ADDRESS</h3>
+                                                </div>
+                                            </div>
+
+                                            <table class="slds-table slds-table--bordered slds-table--col-bordered slds-table--cell-buffer slds-no-row-hover slds-box slds-box--small">
+                                                <tbody>
+                                                <tr>
+                                                    <th class="slds-col slds-text-heading--label">Address:</th>
+                                                    <td class="slds-col slds-text-body--regular"><ui:outputText aura:id="billing_address_1" value="{!v.billing_address_1}" /></td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="slds-col slds-text-heading--label"></th>
+                                                    <td class="slds-col slds-text-body--regular"><ui:outputText aura:id="billing_address_2" value="{!v.billing_address_2}" /></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+
+                                            <div class="slds-form-element slds-p-top--small">
+                                                <div class="slds-form-element__control">
+                                                    <span class="slds-checkbox">
+                                                        <input type="checkbox" name="primary_options" id="primary_checkbox" checked="{!v.is_primary}" disabled="disabled" />
+                                                        <label class="slds-checkbox__label" for="primary_checkbox">
+                                                            <span class="slds-checkbox--faux"></span>
+                                                            <span class="slds-form-element__label">Save as primary</span>
+                                                        </label>
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </aura:set>
+
+                                    </aura:if>
+
+
+                                </div>
+                            </div>
+                            <!--/Payment Card component-->
+                        </div>
+
+                        <div class="slds-col slds-p-horizontal--medium slds-size--1-of-1 slds-medium-size--1-of-2">
+                            <!--Invoice component-->
+                            <div class="slds-box slds-box--small">
+
+                                <div class="slds-p-bottom--small">
+
+                                    <fieldset class="slds-form-element">
+                                        <div class="slds-form-element__control slds-grid">
+                                            <span class="slds-radio slds-col">
+                                                <!-- <ui:inputRadio value="true" name="options" /> -->
+                                                <input type="radio" id="radio-full-payment" name="options" checked="{!v.is_full_payment}" disabled="disabled" />
+                                                <label class="slds-radio__label" for="radio-full-payment">
+                                                    <span class="slds-radio--faux"></span>
+                                                    <span class="slds-form-element__label">Full Payment</span>
+                                                </label>
+                                            </span>
+                                                                    <span class="slds-radio slds-col">
+                                                <!-- <ui:inputRadio value="true" name="options" /> -->
+                                                <input type="radio" id="radio-partial-payment" name="options" disabled="disabled" />
+                                                <label class="slds-radio__label" for="radio-partial-payment">
+                                                    <span class="slds-radio--faux"></span>
+                                                    <span class="slds-form-element__label">Partial Payment</span>
+                                                </label>
+                                            </span>
+                                        </div>
+                                    </fieldset>
+
+                                </div>
+
+
+                                <div class="slds-form-element">
+                                    <div class="slds-form-element_control">
+                                        <div aura:id="show_full_payment">
+
+                                            <div class="slds-theme--shade slds-box slds-box-small">
+
+                                                <div class="slds-p-bottom--small" style="font-weight: bold;"><h3 class="slds-section__title">INCLUDED WITH THIS PAYMENT:</h3></div>
+
+                                                <div class="slds-section" aura:id="isFullPayment">
+                                                    <h4 class="slds-section__title">
+                                                        <!--Todo: dynamic list transferred from invoices page ,fix onclick method to show invoice detail?-->
+                                                        <button class="slds-button slds-section__title-action" onclick="">
+                                                            INV-000000002</button>
+                                                        <div class="slds-p-right--large">
+                                                            <ui:outputCurrency value="{!v.invoice_amount}" currencySymbol="$" />
+                                                        </div>
+                                                    </h4>
+
+                                                    <table class="slds-table slds-table--bordered slds-table--cell-buffer slds-no-row-hover slds-theme--shade">
+                                                        <tr>
+                                                            <th class="slds-size--2-of-12 slds-text-heading--medium">Total:</th>
+                                                            <td class="slds-size--10-of-12 slds-text-heading--medium" style="font-weight:bold; text-align:right">
+                                                                <ui:outputCurrency value="{!v.invoice_amount}" currencySymbol="$" />
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+
+                                            </div>
+
+                                            <section class="slds-clearfix">
+                                                <div class="slds-float--right slds-p-top--large">
+                                                    <button class="slds-button slds-button--neutral slds-m-horizontal--x-small" onclick="{!c.handleCancel}" style="width:100px" disabled="disabled">Cancel</button>
+                                                    <button class="slds-button slds-button--brand" onclick="{!c.handlePay}" style="width:100px; padding-left:20px" disabled="disabled">Pay Now</button>
+                                                </div>
+                                            </section>
+
+                                        </div>
+                                        <div class="slds-hide" aura:id="show_partial_payment">
+
+                                            <div class="slds-theme--shade slds-box slds-box-small">
+                                                <div class="slds-p-bottom--small" style="font-weight: bold;"><h3 class="slds-section__title">INCLUDED WITH THIS PAYMENT:</h3></div>
+                                                <div class="slds-section">
+                                                    <h4 class="slds-section__title">
+                                                        <!--Todo: dynamic list transferred from invoices page ,fix onclick method to show invoice detail?-->
+                                                        <button class="slds-button slds-section__title-action" onclick="">
+                                                            INV-000000002</button>
+                                                        <div class="slds-p-right--large">
+                                                            <ui:outputCurrency value="{!v.invoice_amount}" currencySymbol="$" />
+                                                        </div>
+                                                    </h4>
+
+                                                    <table class="slds-table slds-table--bordered slds-table--cell-buffer slds-no-row-hover slds-theme--shade">
+                                                        <tr style="color: red;">
+                                                            <th class="slds-size--2-of-12 slds-text-heading--medium">*(Balance Due):</th>
+                                                            <td class="slds-size--10-of-12 slds-text-heading--medium" style="text-align:right">
+                                                                <ui:outputCurrency value="{!v.balance_due}" currencySymbol="$" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th class="slds-size--2-of-12 slds-text-heading--medium">Total:</th>
+                                                            <td class="slds-size--10-of-12 slds-text-heading--medium" style="font-weight:bold; text-align:right">
+                                                                <ui:outputCurrency value="{!v.invoice_total}" currencySymbol="$" />
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                            <section class="slds-clearfix">
+                                                <div class="slds-float--right slds-p-top--large">
+                                                    <button class="slds-button slds-button--neutral slds-m-horizontal--x-small" onclick="{!c.handleCancel}" style="width:100px" disabled="disabled">Cancel</button>
+                                                    <button class="slds-button slds-button--brand" onclick="{!c.handlePay}" style="width:100px; padding-left:20px" disabled="disabled">Pay Now</button>
+                                                </div>
+                                            </section>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!--/Invoice component-->
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</aura:component>

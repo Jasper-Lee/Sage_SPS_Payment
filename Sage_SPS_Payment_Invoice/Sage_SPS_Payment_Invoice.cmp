@@ -1,0 +1,37 @@
+<aura:component >
+
+    <aura:attribute name="invoice_amount" type="Decimal" />
+    <aura:attribute name="invoice_total" type="Decimal" />
+    <aura:attribute name="address" type="String" />
+
+    <div class="slds-box slds-box--small slds-theme--shade">
+
+        <div class="slds-p-bottom--small" style="font-weight: bold;"><h3 class="slds-section__title">INCLUDED WITH THIS PAYMENT:</h3></div>
+
+        <div class="slds-section" aura:id="invoice-card">
+            <h4 class="slds-section__title">
+                <button class="slds-button slds-section__title-action" onclick="">
+                    INV-000000002</button>
+                <div class="slds-p-right--large">
+                    <ui:outputCurrency aura:id="invoice_amount" value="{!v.invoice_amount}" currencySymbol="$" />
+                </div>
+            </h4>
+
+            <table class="slds-table slds-table--bordered slds-table--cell-buffer slds-no-row-hover slds-theme--shade">
+                <tr>
+                    <th class="slds-size--2-of-12 slds-text-heading--medium">Total:</th>
+                    <td class="slds-size--10-of-12 slds-text-heading--medium" style="font-weight: bold; text-align:right"><ui:outputCurrency aura:id="invoice_total" value="{!v.invoice_total}" currencySymbol="$" /></td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+    <section class="slds-clearfix">
+        <div class="slds-float--right slds-p-top--large">
+            <button class="slds-button slds-button--neutral slds-m-horizontal--x-small" onclick="{}" style="width:100px">Cancel</button>
+            <button class="slds-button slds-button--brand" onclick="{!c.handleContinuePayment}" style="width:100px; padding-left:20px">Continue</button>
+        </div>
+    </section>
+
+</aura:component>

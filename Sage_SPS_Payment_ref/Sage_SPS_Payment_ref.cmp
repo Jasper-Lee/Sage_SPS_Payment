@@ -1,0 +1,78 @@
+<aura:component implements="force:appHostable">
+
+    <aura:attribute name="invoice_amount" type="Decimal" />
+    <aura:attribute name="invoice_total" type="Decimal" />
+    <aura:attribute name="address" type="String" />
+
+    
+    <div class="slds" style="margin: 20px;" aura:id="main">
+        
+        <div class="slds-grid slds-wrap">
+            
+            <div class="slds-col slds-size--1-of-1">
+
+                <div class="slds-p-top--medium slds-p-bottom--medium slds-p-left--medium slds-p-right--medium slds-theme--shade">
+                    <c:Sage_COR_Bank_Drive_Page_Icon title="Banks" subtitle="Sage Payment Solutions" icon="custom16" icon_category="custom" icon_background_color="standard-account" icon_size="large" />
+                </div>
+
+            </div>
+
+            <div class="slds-col slds-size--1-of-1 slds-p-top--medium slds-p-bottom--medium slds-p-left--large slds-p-right--large">
+
+                <div class="slds-col slds-p-top--small slds-p-bottom--small">
+                    <!--Status Component-->
+                    <div class="slds-wizard" role="navigation">
+                        <ol class="slds-wizard__list">
+                            <li class="slds-wizard__item slds-is-active">
+                                <a href="javascript:void(0);" class="slds-wizard__link">
+                                    <span class="slds-wizard__marker"></span>
+                                    <span class="slds-wizard__label slds-text-title--caps slds-truncate">Invoices</span>
+                                </a>
+                            </li>
+                            <li class="slds-wizard__item slds-is-active">
+                                <a href="javascript:void(0);" class="slds-wizard__link">
+                                    <span class="slds-wizard__marker"></span>
+                                    <span class="slds-wizard__label slds-text-title--caps slds-truncate">Payment</span>
+                                </a>
+                            </li>
+                            <li class="slds-wizard__item">
+                                <a href="javascript:void(0);" class="slds-wizard__link">
+                                    <span class="slds-wizard__marker"></span>
+                                    <span class="slds-wizard__label slds-text-title--caps slds-truncate">Confirmation</span>
+                                </a>
+                            </li>
+                        </ol>
+                        <span class="slds-wizard__progress" style="z-index: 0;">
+                            <span class="slds-wizard__progress-bar" style="width:50%;"></span>
+                        </span>
+                    </div>
+                    <!--/Status Component-->
+                </div>
+
+                <div class="slds-col slds-p-top--small slds-p-bottom--small">
+
+                    <div class="slds-grid slds-wrap slds-grid--pull-padded-medium">
+
+                        <div class="slds-col slds-p-horizontal--medium slds-p-bottom--large slds-size--1-of-1 slds-medium-size--1-of-2">
+                            <!--/Payment Card component-->
+                            <c:Sage_SPS_Payment_Card_Information billing_address_1="{!v.address}" />
+                            <!--/Payment Card component-->
+                        </div>
+
+                        <div class="slds-col slds-p-horizontal--medium slds-size--1-of-1 slds-medium-size--1-of-2">
+                            <!--Invoice component-->
+                            <c:Sage_SPS_Payment_Invoice_Payment invoice_amount="{!v.invoice_amount}" invoice_total="{!v.invoice_total}" />
+                            <!--/Invoice component-->
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</aura:component>

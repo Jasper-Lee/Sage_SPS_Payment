@@ -1,0 +1,96 @@
+<aura:component implements="force:appHostable" controller="Sage_SPS_Payment_Ctrl">
+
+    <!--<aura:attribute name="is_edit" type="boolean" default="false" />-->
+
+    <!--<aura:attribute name="company" type="String" default="Perez e Hijos, S.A." access="global" />-->
+    <!--<aura:attribute name="account" type="String" default="Reece Project Account" access="global" />-->
+    <!--<aura:attribute name="address" type="String" default="6561 Irvine Center Dr. Irvine, CA 92618" access="global" />-->
+    <!--<aura:attribute name="phone" type="String" default="(949)753-1222" access="global" />-->
+    <!--<aura:attribute name="email_address" type="String" default="Contact@Perez_Hijos.com" access="global" />-->
+    <!--<aura:attribute name="currencies" type="String" default="USD" access="global" />-->
+    <!--<aura:attribute name="invoice_amount" type="Decimal" default="1495.00" access="global" />-->
+    <!--<aura:attribute name="invoice_total" type="Decimal" default="1495.00" access="global" />-->
+
+    <aura:attribute name="company" type="String" access="global" />
+    <aura:attribute name="account" type="String" default="Reece Project Account" access="global" />
+    <aura:attribute name="address" type="String" access="global" />
+    <aura:attribute name="phone" type="String" default="(949)753-1222" access="global" />
+    <aura:attribute name="email_address" type="String" access="global" />
+    <aura:attribute name="currencies" type="String" default="USD" access="global" />
+    <aura:attribute name="invoice_amount" type="Decimal" access="global" />
+    <aura:attribute name="invoice_total" type="Decimal" access="global" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.handleFormLoad}" />
+
+
+    <div class="slds" style="margin: 20px;" aura:id="main">
+
+        <div class="slds-grid slds-wrap">
+
+            <div class="slds-col slds-size--1-of-1">
+
+                <div class="slds-p-top--medium slds-p-bottom--medium slds-p-left--medium slds-p-right--medium slds-theme--shade">
+                    <c:Sage_SPS_Payment_Page_Icon title="Banks" subtitle="Sage Payment Solutions" icon="custom16" icon_category="custom" icon_background_color="standard-account" icon_size="large" />
+                </div>
+
+            </div>
+
+            <div class="slds-col slds-size--1-of-1 slds-p-top--medium slds-p-bottom--medium slds-p-left--large slds-p-right--large">
+
+                <div class="slds-col slds-p-top--small slds-p-bottom--small">
+                    <!--Status Component-->
+                    <div class="slds-wizard" role="navigation">
+                        <ol class="slds-wizard__list">
+                            <li class="slds-wizard__item slds-is-active">
+                                <a href="javascript:void(0);" class="slds-wizard__link">
+                                    <span class="slds-wizard__marker"></span>
+                                    <span class="slds-wizard__label slds-text-title--caps slds-truncate">Invoices</span>
+                                </a>
+                            </li>
+                            <li class="slds-wizard__item">
+                                <a href="javascript:void(0);" class="slds-wizard__link">
+                                    <span class="slds-wizard__marker"></span>
+                                    <span class="slds-wizard__label slds-text-title--caps slds-truncate">Payment</span>
+                                </a>
+                            </li>
+                            <li class="slds-wizard__item">
+                                <a href="javascript:void(0);" class="slds-wizard__link">
+                                    <span class="slds-wizard__marker"></span>
+                                    <span class="slds-wizard__label slds-text-title--caps slds-truncate">Confirmation</span>
+                                </a>
+                            </li>
+                        </ol>
+                        <span class="slds-wizard__progress" style="z-index: 0;">
+                            <span class="slds-wizard__progress-bar" style="width: 0%;"></span>
+                        </span>
+                    </div>
+                    <!--/Status Component-->
+                </div>
+
+                <div class="slds-col slds-p-top--small slds-p-bottom--small">
+
+                    <div class="slds-grid slds-wrap slds-grid--pull-padded-medium">
+
+                        <div class="slds-col slds-p-horizontal--medium slds-p-bottom--large slds-size--1-of-1 slds-medium-size--1-of-2">
+                            <!--/Customer Info component-->
+                            <c:Sage_SPS_Payment_Acct_Info company="{!v.company}" account="{!v.account}" address="{!v.address}"
+                                                          email_address="{!v.email_address}" phone="{!v.phone}" currencies="{!v.currencies}" />
+                            <!--/Customer Info component-->
+                        </div>
+
+                        <div class="slds-col slds-p-horizontal--medium slds-size--1-of-1 slds-medium-size--1-of-2">
+                            <!--Invoice component-->
+                            <c:Sage_SPS_Payment_Invoice invoice_amount="{!v.invoice_amount}" invoice_total="{!v.invoice_total}" address="{!v.address}" />
+                            <!--/Invoice component-->
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</aura:component>

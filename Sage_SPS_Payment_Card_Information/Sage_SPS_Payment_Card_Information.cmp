@@ -1,0 +1,233 @@
+<aura:component>
+
+    <aura:attribute name="is_edit" type="boolean" default="true" />
+    <aura:attribute name="is_same_billing_address" type="boolean" default="true" access="global" />
+    <aura:attribute name="is_primary" type="boolean" default="true" />
+
+    <aura:attribute name="card_number" type="String" access="global" />
+    <aura:attribute name="expiration_date" type="String" access="global" />
+    <aura:attribute name="cardholder_name" type="String" access="global" />
+    <aura:attribute name="cvv" type="Integer" access="global" />
+    <aura:attribute name="billing_address_1" type="String" access="global" />
+    <aura:attribute name="billing_address_2" type="String" access="global" />
+
+    <aura:attribute name="selectMonthOptions" type="List" default="['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']" />
+    <aura:attribute name="selectYearOptions" type="List" default="['2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025']" />
+
+    <!-- <aura:handler name="init" value="{!this}" action="{!c.handleFormLoad}" /> -->
+
+    <div class="slds-form-element">
+        <div class="slds-form-element__control">
+            <aura:if isTrue="{!v.is_edit}">
+
+                <div class="slds-box slds-box--small slds-theme--default">
+
+                    <div class="slds-grid slds-grid--vertical-align-center slds-p-bottom--small" style="font-weight: bold;">
+                        <div class="slds-col">
+                            <h3 class="slds-section__title">PAYMENT INFORMATION</h3>
+                        </div>
+                        <div class="slds-col">
+                            <button class="slds-float--right slds-button slds-button--brand" onclick="{!c.handleSave}" >Save</button>
+                        </div>
+                    </div>
+
+                    <table class="slds-table slds-table--bordered slds-table--col-bordered slds-table--cell-buffer slds-no-row-hover slds-box slds-box--small">
+                        <tbody>
+                        <tr>
+                            <th class="slds-col slds-text-heading--label">Card Number:</th>
+                            <td class="slds-col slds-text-body--regular"><ui:inputText aura:id="card_number" class="slds-input" value="{!v.card_number}" /></td>
+                        </tr>
+                        <tr>
+                            <th class="slds-col slds-text-heading--label">Expiration Date:</th>
+                            <td class="slds-col slds-text-body--regular">
+                                <!-- Month / Year Picklist -->
+                                <div class="slds-grid slds-grid--pull-padded-medium slds-align--absolute-center">
+
+                                    <div class="slds-col slds-p-right--x-small">
+                                        <lightning:select name="expire_month" label="Month" required="true" value="{!v.selectedOption}" onchange="">
+                                            <option value="MM" selected="selected">MM</option>
+                                            <aura:iteration items="{!v.selectMonthOptions}" var="option">
+                                                <option value="{!option}" selected="{!if(v.selectedOption==option,'selected','')}">{!option}</option>
+                                            </aura:iteration>
+                                        </lightning:select>
+                                    </div>
+                                    <div class="slds-col slds-p-left--xx-small">
+                                        <div class="slds-col slds-p-right--x-small">
+                                            <lightning:select name="expire_month" label="Year" required="true" value="{!v.selectedOption}" onchange="">
+                                                <option value="YYYY" selected="selected">YYYY</option>
+                                                <aura:iteration items="{!v.selectYearOptions}" var="option">
+                                                    <option value="{!option}" selected="{!if(v.selectedOption==option,'selected','')}">{!option}</option>
+                                                </aura:iteration>
+                                            </lightning:select>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <!-- Month / Year Picklist -->
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="slds-col slds-text-heading--label">Cardholder Name:</th>
+                            <td class="slds-col slds-text-body--regular"><ui:inputText aura:id="cardholder_name" class="slds-input" value="{!v.cardholder_name}" /></td>
+                        </tr>
+                        <tr>
+                            <th class="slds-col slds-text-heading--label">CVV:</th>
+                            <td class="slds-col slds-text-body--regular">
+                                <ui:inputNumber aura:id="cvv" class="slds-input" value="{!v.cvv}" />
+                                <!-- <c:svg ariahidden="true" class="slds-icon" xlinkhref="{!$Resource.SLDS202 + '/assets/icons/action-sprite/svg/symbols.svg#question_post_action'}" /> -->
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="slds-form-element slds-p-top--small">
+                         <div class="slds-form-element__control">
+                            <span class="slds-checkbox">
+                                <input type="checkbox" name="billing_address_options" id="billing_address_checkbox" checked="{!v.is_same_billing_address}" onchange="{!c.handleBillingAddressCheckbox}"/>
+                                <label class="slds-checkbox__label" for="billing_address_checkbox">
+                                    <span class="slds-checkbox--faux"></span>
+                                    <span class="slds-form-element__label">Billing Address Same as Buisness Account</span>
+                                </label>
+                            </span>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <aura:if isTrue="{!v.is_same_billing_address}">
+
+                <aura:set attribute="else">
+                    <div class="slds-box slds-box--small slds-theme--default slds-m-top--small">
+                        <div class="slds-grid slds-grid--vertical-align-center slds-p-bottom--small" style="font-weight: bold;">
+                            <div class="slds-col">
+                                <h3 class="slds-section__title">BILLING ADDRESS</h3>
+                            </div>
+                        </div>
+
+                         <table class="slds-table slds-table--bordered slds-table--col-bordered slds-table--cell-buffer slds-no-row-hover slds-box slds-box--small">
+                            <tbody>
+                            <tr>
+                                <th class="slds-col slds-text-heading--label">Address:</th>
+                                <td class="slds-col slds-text-body--regular"><ui:inputText aura:id="billing_address_1" class="slds-input" value="{!v.billing_address_1}" /></td>
+                            </tr>
+                            <tr>
+                                <th class="slds-col slds-text-heading--label"></th>
+                                <td class="slds-col slds-text-body--regular"><ui:inputText aura:id="billing_address_2" class="slds-input" value="{!v.billing_address_2}" /></td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="slds-form-element slds-p-top--small">
+                             <div class="slds-form-element__control">
+                                <span class="slds-checkbox">
+                                    <input type="checkbox" name="primary_options" id="primary_checkbox" checked="{!v.is_primary}" onchange="{!c.handlePrimary}" />
+                                    <label class="slds-checkbox__label" for="primary_checkbox">
+                                        <span class="slds-checkbox--faux"></span>
+                                        <span class="slds-form-element__label">Save as primary</span>
+                                    </label>
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                </aura:set>
+                </aura:if>
+
+            <!--is_edit Else Block    -->
+            <aura:set attribute="else">
+
+                <div class="slds-box slds-box--small slds-theme--default">
+
+                    <div class="slds-grid slds-grid--vertical-align-center slds-p-bottom--small" style="font-weight: bold;">
+                        <div class="slds-col">
+                            <h3 class="slds-section__title">PAYMENT INFORMATION</h3>
+                        </div>
+                        <div class="slds-col">
+                            <button class="slds-float--right slds-button slds-button--neutral" onclick="{!c.handleEdit}" >Edit</button>
+                        </div>
+                    </div>
+
+                    <table class="slds-table slds-table--bordered slds-table--col-bordered slds-table--cell-buffer slds-no-row-hover slds-box slds-box--small">
+                        <tbody>
+                        <tr>
+                            <th class="slds-size--2-of-12 slds-text-heading--label">Card Number:</th>
+                            <td class="slds-size--10-of-12 slds-text-body--regular"><ui:outputText value="{!v.card_number}" /></td>
+                        </tr>
+                        <tr>
+                            <th class="slds-size--2-of-12 slds-text-heading--label">Expiration Date:</th>
+                            <td class="slds-size--10-of-12 slds-text-body--regular"><ui:outputText value="{!v.expiration_date}" /></td>
+                        </tr>
+                        <tr>
+                            <th class="slds-size--2-of-12 slds-text-heading--label">Cardholder Name:</th>
+                            <td class="slds-size--10-of-12 slds-text-body--regular"><ui:outputText value="{!v.cardholder_name}" /></td>
+                        </tr>
+                        <tr>
+                            <th class="slds-size--2-of-12 slds-text-heading--label">CVV:</th>
+                            <td class="slds-size--10-of-12 slds-text-body--regular"><ui:outputNumber value="{!v.cvv}" /></td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="slds-form-element slds-p-top--small">
+                        <div class="slds-form-element__control">
+                            <span class="slds-checkbox">
+                                <input type="checkbox" name="billing_address_options" id="billing_address_checkbox" checked="{!v.is_same_billing_address}" onchange="{!c.handleBillingAddressCheckbox}" disabled="disabled"/>
+                                <label class="slds-checkbox__label" for="billing_address_checkbox">
+                                    <span class="slds-checkbox--faux"></span>
+                                    <span class="slds-form-element__label">Billing Address Same as Buisness Account</span>
+                                </label>
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <aura:if isTrue="{!v.is_same_billing_address}">
+
+                <aura:set attribute="else">
+                    <div class="slds-box slds-box--small slds-theme--default slds-m-top--small">
+                        <div class="slds-grid slds-grid--vertical-align-center slds-p-bottom--small" style="font-weight: bold;">
+                            <div class="slds-col">
+                                <h3 class="slds-section__title">BILLING ADDRESS</h3>
+                            </div>
+                        </div>
+
+                        <table class="slds-table slds-table--bordered slds-table--col-bordered slds-table--cell-buffer slds-no-row-hover slds-box slds-box--small">
+                            <tbody>
+                            <tr>
+                                <th class="slds-col slds-text-heading--label">Address:</th>
+                                <td class="slds-col slds-text-body--regular"><ui:outputText aura:id="billing_address_1" value="{!v.billing_address_1}" /></td>
+                            </tr>
+                            <tr>
+                                <th class="slds-col slds-text-heading--label"></th>
+                                <td class="slds-col slds-text-body--regular"><ui:outputText aura:id="billing_address_2" value="{!v.billing_address_2}" /></td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="slds-form-element slds-p-top--small">
+                            <div class="slds-form-element__control">
+                        <span class="slds-checkbox">
+                            <input type="checkbox" name="primary_options" id="primary_checkbox" checked="{!v.is_primary}" disabled="disabled" />
+                            <label class="slds-checkbox__label" for="primary_checkbox">
+                                <span class="slds-checkbox--faux"></span>
+                                <span class="slds-form-element__label">Save as primary</span>
+                            </label>
+                        </span>
+                            </div>
+                        </div>
+
+                    </div>
+                </aura:set>
+
+                </aura:if>
+
+            </aura:set>
+            </aura:if>
+            
+            
+            
+        </div>
+    </div>
+
+</aura:component>
